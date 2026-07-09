@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherPixel | Image Encryptor</title>
+  <meta name="description" content="CipherPixel is a polished image encryption and decryption tool with pixel-level effects, custom cursor, 3D hero cube, noise, channel swap and live preview.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="cursorDot" class="cursor-dot"></div>
+  <div id="cursorRing" class="cursor-ring"></div>
+
+  <div class="page-shell">
+    <div class="page-spark"></div>
+    <div class="page-spark page-spark--alt"></div>
+
+    <header class="topbar">
+      <div class="topbar__badge">CipherPixel</div>
+      <nav class="topbar__nav">
+        <a href="#encrypt-panel">Encrypt</a>
+        <a href="#compare-panel">Compare</a>
+        <a href="#terminal-panel">Terminal</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero__content">
+          <span class="eyebrow">Pixel Security Platform</span>
+          <h1>CipherPixel — Professional Image Encryption</h1>
+          <p>Encrypt or decrypt any image using pixel-level transformations, channel permutations and noise masking. Built for real-world polish with animated UI, comparison slider and secure key feedback.</p>
+          <div class="hero__meta">
+            <div><strong>Live mode:</strong> browser-only, no dependencies</div>
+            <div><strong>Compatible:</strong> PNG, JPG, WEBP, BMP</div>
+          </div>
+        </div>
+
+        <div class="hero__scene">
+          <div class="scene-cube">
+            <div class="cube">
+              <div class="cube-face cube-face--front"></div>
+              <div class="cube-face cube-face--back"></div>
+              <div class="cube-face cube-face--left"></div>
+              <div class="cube-face cube-face--right"></div>
+              <div class="cube-face cube-face--top"></div>
+              <div class="cube-face cube-face--bottom"></div>
+            </div>
+          </div>
+          <div class="orbit orbit-1"></div>
+          <div class="orbit orbit-2"></div>
+          <div class="orbit orbit-3"></div>
+        </div>
+      </section>
+
+      <section id="encrypt-panel" class="panel">
+        <div class="panel__head">
+          <div>
+            <span class="eyebrow">Encryption Studio</span>
+            <h2>Upload image and choose your cipher chain</h2>
+          </div>
+          <div class="mode-switch">
+            <button id="encryptModeBtn" class="mode-btn active">Encrypt</button>
+            <button id="decryptModeBtn" class="mode-btn">Decrypt</button>
+          </div>
+        </div>
+
+        <div class="grid grid--2">
+          <div class="panel-card panel-card--glass">
+            <div id="uploadZone" class="upload-zone">
+              <div class="upload-inner">
+                <span class="upload-icon">+</span>
+                <strong>Drag & drop an image</strong>
+                <p>or browse a PNG, JPG, WEBP or BMP file</p>
+                <button id="browseBtn" class="button button--ghost upload-browse">Browse file</button>
+                <input id="fileInput" type="file" accept="image/*" hidden>
+              </div>
+            </div>
+            <div class="verification">
+              <div id="imageInfo" class="stat">No image loaded</div>
+              <div id="resultInfo" class="stat">Ready for processing</div>
+            </div>
+
+            <div class="controls">
+              <label class="field">
+                <span>Encryption Key</span>
+                <input id="encKey" class="input" type="text" placeholder="Enter a secure key...">
+              </label>
+              <div class="key-strength">
+                <div class="key-strength__bar"><span id="keyStrengthFill"></span></div>
+                <div id="keyStrengthLabel" class="key-strength__label">No key entered</div>
+              </div>
+              <button id="genKeyBtn" class="button button--primary">Generate random key</button>
+            </div>
+          </div>
+
+          <div class="panel-card panel-card--glass panel-card--options">
+            <h3>Method & options</h3>
+            <div class="method-grid">
+              <label class="method-box active"><input type="radio" name="method" value="xor" checked><span>XOR Cipher</span><small>Byte-wise XOR</small></label>
+              <label class="method-box"><input type="radio" name="method" value="shift"><span>Bit Shift</span><small>Rotate channel bits</small></label>
+              <label class="method-box"><input type="radio" name="method" value="swap"><span>Channel Swap</span><small>Permute RGB channels</small></label>
+              <label class="method-box"><input type="radio" name="method" value="combo"><span>Combo</span><small>Swap + Shift + XOR</small></label>
+            </div>
+
+            <div class="option-row">
+              <label class="checkbox"><input id="noiseOpt" type="checkbox"><span>Add noise layer</span></label>
+              <label class="checkbox"><input id="invertOpt" type="checkbox"><span>Invert channels</span></label>
+              <label class="checkbox"><input id="rowShuffleOpt" type="checkbox"><span>Row pixel shuffle</span></label>
+            </div>
+
+            <div class="action-row">
+              <button id="processBtn" class="button button--accent"><span id="processBtnText">ENCRYPT IMAGE</span></button>
+              <button id="resetBtn" class="button button--ghost">RESET</button>
+            </div>
+
+            <div id="progressWrap" class="progress-card">
+              <div class="progress-label" id="progressLabel">Ready</div>
+              <div class="progress-track"><span id="progressBar"></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="preview-panel" id="compare-panel">
+        <div class="preview-head">
+          <div>
+            <span class="eyebrow">Processed Output</span>
+            <h2 id="resultLabel">ENCRYPTED</h2>
+          </div>
+          <div id="downloadSection" class="download-card invisible">
+            <div>
+              <div id="successTitle">Encryption Complete!</div>
+              <div id="successDesc">Your image is ready for download.</div>
+            </div>
+            <button id="downloadBtn" class="button button--primary">Download PNG</button>
+          </div>
+        </div>
+
+        <div id="previewContainer" class="preview-grid invisible">
+          <div class="canvas-card">
+            <div class="canvas-label">Original</div>
+            <canvas id="originalCanvas"></canvas>
+          </div>
+          <div class="canvas-card">
+            <div class="canvas-label">Result</div>
+            <canvas id="resultCanvas"></canvas>
+          </div>
+        </div>
+
+        <div id="compareSection" class="compare-card invisible">
+          <div class="compare-topbar">
+            <span>Slide to compare</span>
+            <span class="compare-note">Original vs <strong>Encrypted/Decrypted</strong></span>
+          </div>
+          <div id="compareWrap" class="compare-wrap">
+            <canvas id="compareCanvas"></canvas>
+            <div id="compareSlider" class="compare-slider"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="terminal-panel" id="terminal-panel">
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div>
+              <span class="eyebrow">Live encryption log</span>
+              <h2>Process terminal</h2>
+            </div>
+            <button id="clearLogBtn" class="button button--ghost">Clear log</button>
+          </div>
+          <div id="terminalBody" class="terminal-body"></div>
+        </div>
+      </section>
+
+      <section class="hiw-section">
+        <span class="eyebrow">How it works</span>
+        <div class="hiw-grid">
+          <article class="hiw-card">
+            <h3>Key-derived cipher</h3>
+            <p>Every operation is seeded from your encryption key to ensure that only the matching key can restore the original pixels.</p>
+          </article>
+          <article class="hiw-card">
+            <h3>Multi-step protection</h3>
+            <p>Choose XOR, bit rotations, channel permutations, or combine them for layered obfuscation.</p>
+          </article>
+          <article class="hiw-card">
+            <h3>Visual compare</h3>
+            <p>See the original and processed image side-by-side and slide to inspect the exact pixel effect.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="particles" class="particles"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
